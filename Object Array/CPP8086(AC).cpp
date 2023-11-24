@@ -1,203 +1,130 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <sstream>
-#include <cstring>
-#include <algorithm>
-#include <queue>
-#include <map>
-#include <set>
-#include <cmath>
-#include <iomanip>
-#include <cstdlib>
+#include <bits/stdc++.h>
 using namespace std;
 
-#define MAX 1000000000 + 5
-//#define M 100 + 5
-//#define N 500 + 5
-#define MOD (long long)1000000007
-#define ll long long
-#define ld long double
-#define sz size()
-#define FOR(i, a, b) for(int i = a; i <= b; i++)
-#define FORD(i, a, b) for (int i = a; i >= b; i--)
-#define faster() ios_base::sync_with_stdio(0); cin.tie(NULL); cout.tie(NULL);
-#define zero(n) setw(n) << setfill('0')
-#define stp(n) fixed << setprecision(n)
-
-#define cin fi
-int N, M, K, i;
-
+int soKhach=1, soHang=1, soDon=1;
 class KhachHang;
 class MatHang;
 class HoaDon;
 
-map<int, KhachHang> mpkh;
-map<int, MatHang> mpmh;
+map<string,KhachHang> Khach;
+map<string,MatHang> Hang;
 
-int cntkh = 0;
-
-class KhachHang {
-    friend class HoaDon;
-public:
-	int id;
-	string name, gioitinh, ngaysinh, diachi;
-public:
-	friend istream& operator >> (istream& is, KhachHang& x) {
-		cntkh++;
-
-		if (cntkh == 1) is.ignore();
-
-		x.id = cntkh;
-
-		getline(is, x.name);
-		getline(is, x.gioitinh);
-		getline(is, x.ngaysinh);
-		getline(is, x.diachi);
-
-		mpkh[x.id] = x;
-
-		return is;
+string chuanhoa(string s){
+	stringstream ss(s);
+	string word;
+	string ans="";
+	while(ss>>word){
+		for (int i=0;i<word.size();i++){
+			word[i]=tolower(word[i]);
+		}
+		word[0]=toupper(word[0]);
+		ans=ans + word+" ";
 	}
-};
-
-int cntmh = 0;
-
-class MatHang {
-	friend class HoaDon;
-public:
-	int id;
-	string name, donvi;
-	int giamua, giaban;
-public:
-	friend istream& operator >> (istream& is, MatHang& x) {
-		is.ignore();
-		cntmh++;
-		x.id = cntmh;
-
-		getline(is, x.name);
-		getline(is, x.donvi);
-		is >> x.giamua >> x.giaban;
-
-		mpmh[x.id] = x;
-		return is;
-	}
-};
-
-int cnthd = 0;
-
-class HoaDon {
-public:
-	int id;
-	string id_KhachHang;
-	string id_MatHang;
-	int num;
-	int loinhuan;
-public:
-	friend istream& operator >> (istream& is, HoaDon& x) {
-		cnthd++;
-		x.id = cnthd;
-		is >> x.id_KhachHang >> x.id_MatHang >> x.num;
-
-		int idkh = stoi(x.id_KhachHang.substr(2, 3));
-		int idmh = stoi(x.id_MatHang.substr(2, 3));
-		x.loinhuan = x.num * mpmh[idmh].giaban - x.num * mpmh[idmh].giamua;
-
-		return is;
-	}
-
-	friend ostream& operator << (ostream& os, HoaDon& x) {
-		int idkh = stoi(x.id_KhachHang.substr(2, 3));
-		int idmh = stoi(x.id_MatHang.substr(2, 3));
-		os << "HD" << zero(3) << x.id << " " << mpkh[idkh].name << " " << mpkh[idkh].diachi << " "
-			<< mpmh[idmh].name << " " << mpmh[idmh].donvi << " " << mpmh[idmh].giamua << " " << mpmh[idmh].giaban << " "
-			<< x.num << " " << (ll)mpmh[idmh].giaban * x.num;
-		if (x.id != K) cout << "\n";
-
-		return os;
-	}
-};
-
-
-int main() {
-	KhachHang dskh[25]; 
-	int d1 = 0;
-	MatHang dsmh[45];
-	int d2 = 0;
-	HoaDon dshd[105];
-	int d3 = 0;
-
-	ifstream fi1("KH.in");
-	ifstream fi2("MH.in");
-	ifstream fi3("HD.in");
-
-	string s;
-	vector<string> v;
-
-	while (getline(fi1, s)) {
-		if (s != "\n" && s != " ") v.push_back(s);
-	}
-	while (getline(fi2, s)) {
-		if (s != "\n" && s != " ") v.push_back(s);
-	}
-	while (getline(fi3, s)) {
-		if (s != "\n" && s != " ") v.push_back(s);
-	}
-
-	N = stoi(v[0]);
-	int i = 0;
-	while (i < N * 4 + 1) {
-		cntkh++;
-		KhachHang x;
-		x.id = cntkh;
-		x.name = v[++i];
-		x.gioitinh = v[++i];
-		x.ngaysinh = v[++i];
-		x.diachi = v[++i];
-		mpkh[x.id] = x;
-		dskh[d1++] = x;
-	}
-
-	M = stoi(v[N * 4 + 1]);
-	i = N * 4 + 1;
-	while (i < N * 4 + 1 + M * 4) {
-		MatHang x;
-		cntmh++;
-		x.id = cntmh;
-		x.name = v[++i];
-		x.donvi = v[++i];
-		x.giamua = stoi(v[++i]);
-		x.giaban = stoi(v[++i]);
-
-		mpmh[x.id] = x;
-		dsmh[d2++] = x;
-	}
-
-	K = stoi(v[N * 4 + M * 4 + 2]);
-	i = N * 4 + M * 4 + 2;
-
-	while (i < N * 4 + M * 4 + K + 2) {
-		HoaDon x;
-		cnthd++;
-		x.id = cnthd;
-
-		string s;
-		s = v[++i];
-		stringstream ss(s);
-		string tmp;
-		getline(ss, tmp, ' ');
-		x.id_KhachHang = tmp;
-		getline(ss, tmp, ' ');
-		x.id_MatHang = tmp;
-		getline(ss, tmp, ' ');
-		x.num = stoi(tmp);
-
-		dshd[d3++] = x;
-	}
-
-	for (int i1 = 0; i1 < K; i1++) cout << dshd[i1];
+	ans.pop_back();
+	return ans;
+}
+class KhachHang{
+	public:
+		string maKhach;
+		string tenKhach;
+		string gioitinh;
+		string ngaysinh;
+		string diachi;
 	
-	return 0;
+		friend istream &operator>>(istream &in, KhachHang a){
+			string temp=to_string(soKhach);
+			while(temp.size()<3) temp="0"+temp;
+			a.maKhach="KH"+temp;
+			in>>ws;
+			getline(in,a.tenKhach);
+			a.tenKhach=chuanhoa(a.tenKhach);
+			in>>ws;
+			getline(in,a.gioitinh);
+			in>>ws;
+			getline(in,a.ngaysinh);
+			in>>ws;
+			getline(in,a.diachi);
+			Khach[a.maKhach]=a;
+			soKhach++;
+			return in;
+		}
+};
+
+class MatHang{
+	public:
+		string maHang;
+		string tenHang;
+		string donvi;
+		long long int giamua, giaban;
+		
+		friend istream &operator>>(istream &in, MatHang a){
+			string temp=to_string(soHang);			
+			while(temp.size()<3) temp="0"+temp;
+			a.maHang="MH"+temp;
+			in>>ws;
+			getline(in,a.tenHang);
+			in>>ws;
+			getline(in,a.donvi);
+			in>>ws;
+			in>>a.giamua>>a.giaban;
+			Hang[a.maHang]=a;
+			soHang++;
+			return in;
+		}	
+};
+
+class HoaDon{
+	public:
+		string maDon;
+		string maKhach;
+		string maHang;
+		long long int soluong;
+		long long int thanhtien;
+		
+		friend istream &operator>>(istream &in, HoaDon &a){
+			string temp=to_string(soDon);
+			while(temp.size()<3) temp="0"+temp;
+			a.maDon="HD"+temp;		
+			in>>ws;
+			in>>a.maKhach;
+			in>>ws;
+			in>>a.maHang;
+			in>>a.soluong;
+			soDon++;
+			return in;
+		}
+		friend ostream &operator<<(ostream &out, HoaDon &a){
+			KhachHang khachhang=Khach[a.maKhach];
+			MatHang mathang=Hang[a.maHang];
+			out<<a.maDon<<" "<<khachhang.tenKhach<<" "<<khachhang.diachi<<" "<<mathang.tenHang<<" "<<mathang.donvi<<" "<<mathang.giamua<<" "<<mathang.giaban<<" "<<a.soluong<<" "<<mathang.giaban*a.soluong<<"\n";
+			return out;
+		}
+};
+
+ 
+int main(){
+	ifstream fk{"KH.in"};
+	ifstream fm{"MH.in"};
+	ifstream fd{"HD.in"};
+	int k,m,d;
+	fk>>k;
+	fk>>ws;
+	fm>>m;
+	fk>>ws;
+	fd>>d;
+	fk>>ws;
+	KhachHang kh[k]; MatHang mh[m]; HoaDon hd[d];
+	for (int i=0;i<k;i++){
+		fk>>kh[i];
+	}
+	for (int i=0;i<m;i++){
+		fm>>mh[i];
+	}
+	for (int i=0;i<d;i++){
+		fd>>hd[i];
+	}
+	for (int i=0;i<d;i++){
+		cout<<hd[i];
+	}
+	fk.close(); fm.close(); fd.close();
 }
