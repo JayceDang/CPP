@@ -1,5 +1,3 @@
-//https://code.ptit.edu.vn/student/question/CPP0239
-//Tim hang cua ma tran
 #include <bits/stdc++.h>
 using namespace std;
 int main() {
@@ -17,7 +15,6 @@ int main() {
         
         int rank = C;
         for (int row = 0; row < rank; row++) {
-        	//Kiem tra phan tu dau tien co = 0
             if (mat[row][row]) 
                 for (int col = 0; col < R; col++) {
                     if (col != row) {

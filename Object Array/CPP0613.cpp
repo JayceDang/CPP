@@ -1,27 +1,28 @@
 //https://code.ptit.edu.vn/student/question/CPP0613
 //Danh sach doi tuong sinh vien - 3
 #include <bits/stdc++.h>
-#include <bits/stdc++.h>
 using namespace std;
 
 int stt = 1;
 
 class SinhVien {
-public:
-    string msv, ten, lop, nsinh;
-    float gpa;
+	public:
+    	string msv, ten, lop, nsinh;
+    	float gpa;
 
     friend istream &operator >> (istream &is, SinhVien &a) {
         scanf("\n");
         getline(is, a.ten);
         is >> a.lop >> a.nsinh >> a.gpa;
 
-        string str = "", temp;
+        string str = "", token;
         stringstream ss(a.ten);
-        while (ss >> temp) {
-            transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
-            temp[0] = toupper(temp[0]);
-            str += temp + " ";
+        while (ss >> token) {
+            token[0] = toupper(token[0]);
+            for (int i = 1; i < token.size(); ++i) {
+            	token[i] = tolower(token[i]);
+			}
+			str += token + " ";
         }
         str.pop_back();
         a.ten = str;

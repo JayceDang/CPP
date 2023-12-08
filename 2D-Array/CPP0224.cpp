@@ -1,5 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
+ 
+/*
+	|  (-1,-1)  |  (-1, 0) | (-1, 1) |
+	|  (0, -1)  |  (0, 0)  | (0, 1)  |
+	|  (1, -1)  |  (1, 0)  | (1, 1)  |
+*/
 
 int kx[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
 int ky[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
@@ -18,6 +24,7 @@ void loang(int i1, int j1) {
 int main() {
     int t;
     cin >> t;
+    
     while (t--) {
         cin >> n >> m;
         for (int i = 0; i < n; i++) {
